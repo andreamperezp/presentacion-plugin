@@ -6,6 +6,7 @@
 export const media = {
   'ad-a': '', // Anuncio A (Screamfield, 9:16) — mismo archivo en 01 y 06
   'ad-b': '', // Anuncio B (Screamfield, 9:16) — mismo archivo en 01 y 06
+  'live-video': './assets/media/screamfield-live.mp4', // Anuncio real dentro del muro de la 05 (9:16); al hacer clic se abre a pantalla completa
   team: '', // Foto real de Mike y Eduardo / equipo (03)
   'screamfield-hero': '', // Vídeo hero o fotograma de Screamfield (04)
   'wow-stage': '', // Vídeo / foto oficial de WOW Stage (09)
@@ -144,7 +145,7 @@ export const slides = [
   {
     name: 'Screamfield · Live',
     notes:
-      'Diapositiva puente hacia el navegador. Dejar aire para pasar al directo. NO simular capturas de Ads Manager (solo una captura real y fechada como plan B).\nMaterial pendiente: cuenta publicitaria real / captura de respaldo autorizada.',
+      'Clic en cualquier parte de la sección (o tecla V / Enter) abre el anuncio real a pantalla completa con sonido; Esc o clic para cerrar.\nDiapositiva puente hacia el navegador. Dejar aire para pasar al directo. NO simular capturas de Ads Manager (solo una captura real y fechada como plan B).\nMaterial pendiente: cuenta publicitaria real / captura de respaldo autorizada.',
   },
   {
     name: 'Revelación A/B',

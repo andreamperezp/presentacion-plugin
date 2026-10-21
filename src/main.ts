@@ -5,16 +5,17 @@ import './style.css'
 
 import gsap from 'gsap'
 import Lenis from 'lenis'
-import { logos, slides } from './content'
+import { logos, media, slides } from './content'
 import { slideDefs, type SceneKind } from './slides'
 import { SceneManager, type SceneFactory } from './three/SceneManager'
 import { moon } from './three/moon'
-import { cards, cardsDark, cardsLight } from './three/cards'
+import { cards, cardsDark, cardsLight, type CardsModule } from './three/cards'
 import { galaxy } from './three/galaxy'
 import { slabs } from './three/slabs'
 import { syncVideos } from './ui/MediaSlot'
 import { Timer } from './ui/Timer'
 import { PresenterView } from './ui/PresenterView'
+import { VideoLightbox } from './ui/VideoLightbox'
 
 const N = slideDefs.length
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -43,7 +44,7 @@ const app = document.getElementById('app')!
 app.innerHTML = `
   <div class="loader"><img src="${logos.plugin}" alt="" /><i class="loader-bar"></i></div>
   <div class="progress"></div>
-  <div class="cursor is-hidden"></div>
+  <div class="cursor is-hidden"><i class="cursor-play"></i></div>
   <div class="scroller" style="height:${N * 100}vh"></div>
   ${slideDefs
     .map(
@@ -79,15 +80,18 @@ const titles = panels.map((p) => (p.querySelector('.title')?.textContent ?? '').
 
 const factories: Record<SceneKind, SceneFactory> = {
   moon,
-  'cards-dark': cards(cardsDark),
+  'cards-dark': cards({ ...cardsDark, video: media['live-video'] || undefined }),
   'cards-light': cards(cardsLight),
   galaxy,
   slabs,
 }
 const scenes = new SceneManager()
+let liveWall: CardsModule | null = null
 panels.forEach((p, i) => {
   const layer = p.querySelector<HTMLElement>('.scene-layer')
-  if (layer) scenes.add(i, layer, factories[layer.dataset.scene as SceneKind])
+  if (!layer) return
+  const mod = scenes.add(i, layer, factories[layer.dataset.scene as SceneKind])
+  if (p.id === 's05') liveWall = mod as CardsModule
 })
 
 /* ───────────── Animaciones de entrada ───────────── */
@@ -204,9 +208,35 @@ addEventListener('resize', () => {
 /* ───────────── Navegación ───────────── */
 
 const timer = new Timer(document.getElementById('s13')!)
+
+// 05: clic en cualquier parte (o V / Enter) abre el anuncio real desde su tarjeta del muro.
+const liveVideo = media['live-video']
+  ? new VideoLightbox(media['live-video'], {
+      onOpen: () => {
+        lenis.stop()
+        document.body.classList.add('lb-open')
+      },
+      onClose: () => {
+        lenis.start()
+        document.body.classList.remove('lb-open')
+      },
+    })
+  : null
+const openLiveVideo = () => liveVideo?.open(() => liveWall?.heroRect() ?? null)
+const onLiveSlide = () => panels[active]?.id === 's05' && !!liveVideo
 const presenter = new PresenterView(titles, (e) => onKey(e))
 
 function onKey(e: KeyboardEvent) {
+  if (liveVideo?.isOpen) {
+    if (e.key === 'Escape' || e.key === 'Backspace' || e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === 'PageUp') {
+      e.preventDefault()
+      liveVideo.close()
+    } else if (e.key === ' ' || e.key === 'k') {
+      e.preventDefault()
+      liveVideo.togglePlay()
+    }
+    return
+  }
   const t = e.target as HTMLElement | null
   if (t?.isContentEditable) {
     if (e.key === 'Escape' || e.key === 'Enter') {
@@ -243,6 +273,14 @@ function onKey(e: KeyboardEvent) {
       if (document.fullscreenElement) document.exitFullscreen()
       else document.documentElement.requestFullscreen?.()
       break
+    case 'v':
+    case 'V':
+    case 'Enter':
+      if (onLiveSlide()) {
+        e.preventDefault()
+        openLiveVideo()
+      }
+      break
     case 'n':
     case 'N':
       presenter.open(active)
@@ -267,6 +305,8 @@ addEventListener('click', (e) => {
   if (t.closest('[contenteditable], a, button, video[controls]')) return
   if (Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) > 6) return
   if (String(getSelection() ?? '').length) return
+  if (liveVideo?.isOpen) return
+  if (onLiveSlide() && t.closest('#s05')) return openLiveVideo()
   go(active + 1)
 })
 
@@ -284,7 +324,10 @@ addEventListener('pointermove', (e) => {
   cur.tx = e.clientX
   cur.ty = e.clientY
   cursor.classList.remove('is-hidden')
-  cursor.classList.toggle('is-big', !!(e.target as HTMLElement).closest('.motive, .case-box, .brief-card, .flow-box, .media-slot'))
+  const over = e.target as HTMLElement
+  const play = onLiveSlide() && !liveVideo?.isOpen && !!over.closest('#s05')
+  cursor.classList.toggle('is-play', play)
+  cursor.classList.toggle('is-big', play || !!over.closest('.motive, .case-box, .brief-card, .flow-box, .media-slot'))
   document.body.classList.remove('is-idle')
   clearTimeout(idleTimer)
   idleTimer = window.setTimeout(() => document.body.classList.add('is-idle'), 2500)

@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import type { SceneFactory } from './SceneManager'
+import type { SceneModule } from './SceneManager'
 
 interface CardsOptions {
   bg: string
@@ -7,6 +7,8 @@ interface CardsOptions {
   flash: string
   /** Luminancia de los elementos del anuncio sobre el color base (0–1). */
   detail: number
+  /** Vídeo real que sustituye a una de las tarjetas del muro. */
+  video?: string
 }
 
 export const cardsDark: CardsOptions = {
@@ -88,9 +90,33 @@ function adTexture(detail: number) {
   return tex
 }
 
+/** Máscara de esquinas redondeadas para la tarjeta de vídeo. */
+function roundMask() {
+  const c = document.createElement('canvas')
+  c.width = 256
+  c.height = 456
+  const g = c.getContext('2d')!
+  g.fillStyle = '#000'
+  g.fillRect(0, 0, c.width, c.height)
+  g.fillStyle = '#fff'
+  g.beginPath()
+  g.roundRect(0, 0, c.width, c.height, 22)
+  g.fill()
+  return new THREE.CanvasTexture(c)
+}
+
+// Hueco del muro que ocupa el vídeo: zona derecha, a media altura.
+const HERO_COL = 7
+const HERO_ROW = 4
+
+export interface CardsModule extends SceneModule {
+  /** Rectángulo en pantalla (px) de la tarjeta de vídeo, para animar la apertura. */
+  heroRect(): DOMRect | null
+}
+
 export const cards =
-  (opts: CardsOptions): SceneFactory =>
-  () => {
+  (opts: CardsOptions) =>
+  (renderer: THREE.WebGLRenderer): CardsModule => {
     const scene = new THREE.Scene()
     const bg = new THREE.Color(opts.bg)
     scene.background = bg
@@ -130,11 +156,63 @@ export const cards =
       }
     }
 
+    // Tarjeta con el anuncio real: vídeo en bucle, sin sonido, con borde brasa que late.
+    const heroIndex = opts.video ? HERO_ROW * COLS + HERO_COL : -1
+    const hero = new THREE.Group()
+    let video: HTMLVideoElement | null = null
+    let glowMat: THREE.MeshBasicMaterial | null = null
+    if (opts.video) {
+      video = document.createElement('video')
+      video.src = opts.video
+      video.muted = true
+      video.loop = true
+      video.playsInline = true
+      video.preload = 'auto'
+      const tex = new THREE.VideoTexture(video)
+      tex.colorSpace = THREE.SRGBColorSpace
+      const mask = roundMask()
+      const screen = new THREE.Mesh(
+        geo,
+        new THREE.MeshBasicMaterial({ map: tex, alphaMap: mask, transparent: true, fog: false, side: THREE.DoubleSide }),
+      )
+      glowMat = new THREE.MeshBasicMaterial({ color: opts.flash, alphaMap: mask, transparent: true, fog: false, depthWrite: false })
+      const glow = new THREE.Mesh(geo, glowMat)
+      glow.scale.set(1.07, 1.04, 1)
+      glow.position.z = -0.02
+      hero.add(glow, screen)
+      group.add(hero)
+    }
+    const corners = [
+      new THREE.Vector3(-CARD_W / 2, -CARD_H / 2, 0),
+      new THREE.Vector3(CARD_W / 2, -CARD_H / 2, 0),
+      new THREE.Vector3(-CARD_W / 2, CARD_H / 2, 0),
+      new THREE.Vector3(CARD_W / 2, CARD_H / 2, 0),
+    ]
+    const v3 = new THREE.Vector3()
+
     let flashClock = 0
 
     return {
       scene,
       camera,
+      setActive(active) {
+        if (!video) return
+        if (active) video.play().catch(() => {})
+        else video.pause()
+      },
+      heroRect() {
+        if (heroIndex < 0) return null
+        hero.updateWorldMatrix(true, false)
+        const box = renderer.domElement.getBoundingClientRect()
+        let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity
+        for (const c of corners) {
+          v3.copy(c).applyMatrix4(hero.matrixWorld).project(camera)
+          const x = box.left + ((v3.x + 1) / 2) * box.width
+          const y = box.top + ((1 - v3.y) / 2) * box.height
+          x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y)
+        }
+        return new DOMRect(x0, y0, x1 - x0, y1 - y0)
+      },
       resize(w, h) {
         // Muro a la derecha: el texto vive a la izquierda.
         group.position.x = 4.6 * Math.min(1.25, w / h / (16 / 9))
@@ -152,11 +230,19 @@ export const cards =
           const float = Math.sin(t * 0.8 + phase[i]) * 0.07
           dummy.position.set(Math.sin(a) * RADIUS, y + float, RADIUS - Math.cos(a) * RADIUS - 9)
           dummy.rotation.set(0, -a, Math.sin(t * 0.5 + phase[i]) * 0.012)
+          if (i === heroIndex) {
+            // La tarjeta de vídeo ocupa este hueco, un poco adelantada y más grande.
+            hero.position.copy(dummy.position).multiplyScalar(0.94)
+            hero.rotation.copy(dummy.rotation)
+            hero.scale.setScalar(1.25)
+            dummy.scale.setScalar(0)
+          } else dummy.scale.setScalar(1)
           dummy.updateMatrix()
           mesh.setMatrixAt(i, dummy.matrix)
           current[i].lerp(base[i], k)
           mesh.setColorAt(i, current[i])
         }
+        if (glowMat) glowMat.opacity = 0.55 + 0.45 * Math.sin(t * 3)
         mesh.instanceMatrix.needsUpdate = true
         mesh.instanceColor!.needsUpdate = true
 

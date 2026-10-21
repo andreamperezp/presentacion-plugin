@@ -16,6 +16,8 @@ export interface SceneModule {
   camera: THREE.PerspectiveCamera
   resize?(w: number, h: number): void
   update(f: FrameState): void
+  /** Se llama al entrar o salir de pantalla (p. ej. para pausar vídeos). */
+  setActive?(active: boolean): void
 }
 
 export type SceneFactory = (renderer: THREE.WebGLRenderer) => SceneModule
@@ -61,6 +63,7 @@ export class SceneManager {
     const entry: Entry = { index, renderer, mod: factory(renderer), host, snapshot, w: 0, h: 0, active: false }
     this.entries.push(entry)
     this.resize(entry)
+    return entry.mod
   }
 
   private resize(e: Entry) {
@@ -84,7 +87,9 @@ export class SceneManager {
     for (const e of this.entries) {
       const progress = scroll - e.index
       // Visible desde que empieza a entrar hasta que la siguiente sección la tapa del todo.
-      e.active = progress > -1 && progress < 1
+      const active = progress > -1 && progress < 1
+      if (active !== e.active) e.mod.setActive?.(active)
+      e.active = active
       if (!e.active) continue
       this.renderEntry(e, dt, progress)
     }
