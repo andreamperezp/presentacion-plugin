@@ -2,10 +2,13 @@
 // Marcado del copy: *texto* = color de acento de la sección · | = salto de línea.
 // Regla editorial: copy exacto, sin métricas inventadas ("—" hasta tener datos verificados).
 
-/** Rutas de media. Deja '' para mostrar el placeholder. Admite imagen o vídeo (.mp4 / .webm). */
+/**
+ * Rutas de media. Deja '' para mostrar el placeholder. Admite imagen o vídeo (.mp4 / .webm).
+ * Evita nombres de archivo o claves con "ad" / "ads" / "banner": los bloqueadores de anuncios los ocultan.
+ */
 export const media = {
-  'ad-a': '', // Anuncio A (Screamfield, 9:16) — mismo archivo en 01 y 06
-  'ad-b': '', // Anuncio B (Screamfield, 9:16) — mismo archivo en 01 y 06
+  'pieza-a': './assets/media/screamfield-live.mp4', // Anuncio A (9:16) — mismo archivo en 01 y 06. Ejemplo hasta tener la pieza real
+  'pieza-b': './assets/media/screamfield-live.mp4', // Anuncio B (9:16) — mismo archivo en 01 y 06. Ejemplo hasta tener la pieza real
   'live-video': './assets/media/screamfield-live.mp4', // Anuncio real dentro del muro de la 05 (9:16); al hacer clic se abre a pantalla completa
   team: '', // Foto real de Mike y Eduardo / equipo (03)
   'screamfield-hero': '', // Vídeo hero o fotograma de Screamfield (04)
@@ -13,6 +16,12 @@ export const media = {
 } satisfies Record<string, string>
 
 export type MediaKey = keyof typeof media
+
+/** Portada opcional de un vídeo (si no hay, se usa su primer fotograma). */
+export const posters: Partial<Record<MediaKey, string>> = {
+  'pieza-a': './assets/media/screamfield-live-a.jpg',
+  'pieza-b': './assets/media/screamfield-live-b.jpg',
+}
 
 export const logos = {
   plugin: './assets/plugin-logo.png',

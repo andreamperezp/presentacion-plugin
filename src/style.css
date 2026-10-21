@@ -252,14 +252,14 @@ ol {
   margin-top: 44u;
   max-width: 760u;
 }
-.s01-ads {
+.s01-pair {
   position: absolute;
   right: 100u;
   top: 150u;
   display: flex;
   gap: 48u;
 }
-.ad figcaption {
+.pick figcaption {
   margin-bottom: 18u;
   color: var(--paper);
 }
@@ -292,6 +292,8 @@ ol {
   display: block;
 }
 .phone-screen > .media-slot {
+  display: grid;
+  place-items: center;
   cursor: default;
 }
 .phone-island {
@@ -308,7 +310,7 @@ ol {
 .phone-play {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 76%;
   width: 104u;
   height: 104u;
   margin: -52u 0 0 -52u;
@@ -349,7 +351,7 @@ ol {
     box-shadow: 0 0 0 28u rgb(255 90 31 / 0);
   }
 }
-.ad--b {
+.pick--b {
   margin-top: 96u;
 }
 .s01-vote {

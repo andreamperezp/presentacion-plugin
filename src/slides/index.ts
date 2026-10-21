@@ -39,14 +39,14 @@ export const slideDefs: SlideDef[] = [
         ${title(c.s01.title)}
         ${caption(c.s01.caption)}
       </div>
-      <div class="s01-ads">
-        <figure class="ad" data-a>
+      <div class="s01-pair">
+        <figure class="pick" data-a>
           <figcaption class="mono">${c.s01.adA}</figcaption>
-          ${phoneSlot('ad-a')}
+          ${phoneSlot('pieza-a')}
         </figure>
-        <figure class="ad ad--b" data-a>
+        <figure class="pick pick--b" data-a>
           <figcaption class="mono">${c.s01.adB}</figcaption>
-          ${phoneSlot('ad-b')}
+          ${phoneSlot('pieza-b')}
         </figure>
       </div>
       <p class="mono s01-vote" data-a><i class="dot"></i>${c.s01.vote}</p>
@@ -126,7 +126,7 @@ export const slideDefs: SlideDef[] = [
           .map(
             (k) => `
           <article class="result-panel" data-a>
-            ${phoneSlot(k === 'a' ? 'ad-a' : 'ad-b')}
+            ${phoneSlot(k === 'a' ? 'pieza-a' : 'pieza-b')}
             <div class="result-body">
               <h3 class="result-title">${k === 'a' ? c.s06.adA : c.s06.adB}</h3>
               <p class="mono result-label">${c.s06.results}</p>

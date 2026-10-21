@@ -1,4 +1,4 @@
-import { media, type MediaKey } from '../content'
+import { media, posters, type MediaKey } from '../content'
 
 const isVideo = (src: string) => /\.(mp4|webm|mov)(\?.*)?$/i.test(src)
 
@@ -37,9 +37,9 @@ const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-
 export function phoneSlot(key: MediaKey, className = ''): string {
   const src = media[key]
   const screen = !src
-    ? `<div class="media-slot is-empty"><span class="slot-hint">${key.toUpperCase()} · 9:16</span></div>`
+    ? `<div class="media-slot is-empty"><span class="slot-hint">${key.replace('-', ' ').toUpperCase()} · 9:16</span></div>`
     : isVideo(src)
-      ? `<video src="${src}#t=0.1" playsinline preload="metadata"></video>
+      ? `<video src="${posters[key] ? src : `${src}#t=0.1`}"${posters[key] ? ` poster="${posters[key]}"` : ''} playsinline preload="metadata"></video>
          <button class="phone-play" type="button" aria-label="Reproducir anuncio">${PLAY}</button>`
       : `<img src="${src}" alt="" decoding="async" />`
   return `<div class="phone ${className}" data-slot="${key}"><div class="phone-screen">${screen}<i class="phone-island"></i></div></div>`
