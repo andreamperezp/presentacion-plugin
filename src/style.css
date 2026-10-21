@@ -1365,3 +1365,6 @@ body.lb-open .cursor {
     display: none;
   }
 }
+.phone-screen:not(:has(video)) {
+  cursor: default;
+}

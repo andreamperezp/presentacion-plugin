@@ -108,66 +108,93 @@ export const copy = {
   },
 }
 
-/** Notas del ponente (ventana N). Aquí van las indicaciones visuales: nunca en pantalla. */
+/**
+ * Notas del ponente (ventana N). Aquí van las indicaciones visuales: nunca en pantalla.
+ * speaker / minutes: escaleta de un solo ponente por sección (90 min en total).
+ */
 export const slides = [
   {
     name: 'Apertura · Interacción',
+    speaker: 'EDUARDO',
+    minutes: 6,
     notes:
       'Pantalla dividida con dos miniaturas o fotogramas REALES de Screamfield. Resultados ocultos; sin cifras ni pistas sobre el ganador.\nMaterial pendiente: dos creatividades reales A/B autorizadas y comparables.',
   },
   {
     name: 'Idea central',
+    speaker: 'MIKE',
+    minutes: 5,
     notes:
       'Pantalla tipográfica de alto impacto. La segunda frase pesa tanto como la primera. Sin iconos, gráficos ni bloques explicativos.',
   },
   {
     name: 'Quiénes somos',
+    speaker: 'EDUARDO',
+    minutes: 4,
     notes:
       'Fotografía real de Mike y Eduardo, o del equipo. Branding actual; evitar mosaico de clientes y cronología.\nMaterial pendiente: fotografía real aprobada de fundadores/equipo.',
   },
   {
     name: 'Caso 01 · Screamfield',
+    speaker: 'MIKE',
+    minutes: 6,
     notes:
       'Vídeo hero o fotograma cinematográfico real de Screamfield. Predominio de imagen; titular grande y caption muy corto.\nMaterial pendiente: vídeo o fotos autorizadas del parque.',
   },
   {
     name: 'Screamfield · Live',
+    speaker: 'EDUARDO',
+    minutes: 25,
     notes:
-      'Clic en cualquier parte de la sección (o tecla V / Enter) abre el anuncio real a pantalla completa con sonido; Esc o clic para cerrar.\nDiapositiva puente hacia el navegador. Dejar aire para pasar al directo. NO simular capturas de Ads Manager (solo una captura real y fechada como plan B).\nMaterial pendiente: cuenta publicitaria real / captura de respaldo autorizada.',
+      'Eduardo conduce el bloque completo en Ads Manager. Llevar seleccionados los anuncios A/B y 3 piezas adicionales de Screamfield con métricas verificadas.\nClic en cualquier parte de la sección (o tecla V / Enter) abre el anuncio real a pantalla completa con sonido; Esc o clic para cerrar.\nDiapositiva puente hacia el navegador. Dejar aire para pasar al directo. NO simular capturas de Ads Manager (solo una captura real y fechada como plan B).\nMaterial pendiente: cuenta publicitaria real / captura de respaldo autorizada.',
   },
   {
     name: 'Revelación A/B',
+    speaker: 'MIKE',
+    minutes: 5,
     notes:
       'Recuperar exactamente las dos piezas de la 01. Comparativa real con periodo, inversión y métrica principal legibles.\nMétricas verificadas y fechadas; no inventar ni insinuar causalidad.',
   },
   {
     name: 'Diversificación creativa',
+    speaker: 'EDUARDO',
+    minutes: 8,
     notes:
       'Seis territorios en mosaico 2 × 3. Cada tarjeta es una motivación, NO un tipo de archivo o resolución.\nOpcional: imagen real por concepto; no generar resultados ficticios.',
   },
   {
     name: 'Andromeda',
+    speaker: 'MIKE',
+    minutes: 6,
     notes:
       'Diagrama de cuatro pasos con Andromeda identificada únicamente en la fase de selección inicial. NO representarla como todo el algoritmo de Meta.',
   },
   {
     name: 'Agency life',
+    speaker: 'EDUARDO',
+    minutes: 8,
     notes:
       'Fotografía documental auténtica de Plugin trabajando: reunión, producción, dirección o revisión creativa. Nada de stock.\nMaterial pendiente: foto real de Mike, Eduardo o el equipo.',
   },
   {
     name: 'Modelo de agencia',
+    speaker: 'MIKE',
+    minutes: 6,
     notes:
       'Composición tipográfica más una secuencia de cinco pasos. Evitar embudo complejo y jerga extra: síntesis del método Plugin.',
   },
   {
     name: 'Creative challenge',
+    speaker: 'EDUARDO',
+    minutes: 8,
     notes:
       'Estructura de brief de agencia. Las cuatro variables deben verse desde el fondo del aula. Escribe el caso elegido en la caja CASO.\nTecla T: inicia / pausa el temporizador (5 + 5 + 2 min). Tecla R: reinicia.\nSin inventar recursos o límites reales.',
   },
   {
     name: 'Cierre',
+    speaker: 'MIKE → EDUARDO',
+    minutes: 3,
     notes:
-      'Cierre puramente editorial: titular en dos golpes, logo actual y mucho espacio negativo. Sin CTA, QR ni texto adicional.',
+      'Único relevo compartido: Mike abre el cierre y Eduardo lo termina.\nCierre puramente editorial: titular en dos golpes, logo actual y mucho espacio negativo. Sin CTA, QR ni texto adicional.',
   },
 ]

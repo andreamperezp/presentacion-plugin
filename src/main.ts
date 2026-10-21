@@ -80,7 +80,9 @@ const dims = panels.map((p) => p.querySelector<HTMLElement>('.panel-dim')!)
 const progressBar = document.querySelector<HTMLElement>('.progress')!
 const navPrev = document.querySelector<HTMLButtonElement>('.nav-prev')!
 const navNext = document.querySelector<HTMLButtonElement>('.nav-next')!
-const titles = panels.map((p) => (p.querySelector('.title')?.textContent ?? '').replace(/\s+/g, ' ').trim())
+const titles = panels.map((p) =>
+  [...p.querySelectorAll('.title .line')].map((l) => l.textContent).join(' ').replace(/\s+/g, ' ').trim(),
+)
 
 /* ───────────── Escenas 3D ───────────── */
 

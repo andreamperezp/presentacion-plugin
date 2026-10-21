@@ -18,9 +18,9 @@ npm run build     # carpeta estática en dist/ (funciona offline: abrir con `npm
 | Botón ↑ en la última sección | Vuelve al inicio |
 | Inicio / Fin | Primera / última |
 | F | Pantalla completa |
-| N | Ventana de notas del ponente (actual, siguiente, notas, reloj) |
+| N | Ventana de notas: quién habla, tiempo de la sección según la escaleta (90 min), notas, siguiente ponente y reloj total |
 | Clic / V / Enter (en la 05) | Abre el anuncio real del muro a pantalla completa (Esc o clic para cerrar) |
-| T / R (en la 13) | Iniciar-pausar / reiniciar el temporizador 5 + 5 + 2 min |
+| T / R (en la sección del reto) | Iniciar-pausar / reiniciar el temporizador 5 + 5 + 2 min |
 
 La URL guarda la sección (`#5`). Imprimir (Ctrl/Cmd + P → Guardar como PDF) genera una página 1920 × 1080 por sección,
 con las animaciones en su estado final y las escenas 3D como fotograma estático.
@@ -35,6 +35,7 @@ Todo está en `src/content.ts`:
 - `results`: periodo, inversión y métrica de la 06. Se muestran como "—" hasta tener datos verificados.
 - `flags.moon`: oculta la luna 3D de la 04.
 - `copy`: textos exactos (`*texto*` = color de acento, `|` = salto de línea).
+- `slides[].speaker` / `slides[].minutes`: escaleta (un solo ponente por sección).
 - `slides[].notes`: notas del ponente (las indicaciones visuales viven aquí, nunca en pantalla).
 
 ## Estructura
