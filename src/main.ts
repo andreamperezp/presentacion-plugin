@@ -12,7 +12,7 @@ import { moon } from './three/moon'
 import { cards, cardsDark, type CardsModule } from './three/cards'
 import { galaxy } from './three/galaxy'
 import { slabs } from './three/slabs'
-import { syncVideos } from './ui/MediaSlot'
+import { initPhones, pausePhones, syncVideos } from './ui/MediaSlot'
 import { Timer } from './ui/Timer'
 import { PresenterView } from './ui/PresenterView'
 import { VideoLightbox } from './ui/VideoLightbox'
@@ -151,6 +151,7 @@ function layout(s: number) {
       visible[i] = show
       panels[i].style.visibility = show ? 'visible' : 'hidden'
       syncVideos(panels[i], show)
+      if (!show) pausePhones(panels[i])
     }
     if (!show) continue
     if (p < 0) {
@@ -217,6 +218,7 @@ addEventListener('resize', () => {
 /* ───────────── Navegación ───────────── */
 
 const timer = new Timer(document.getElementById('s13')!)
+initPhones()
 
 // 05: clic en cualquier parte (o V / Enter) abre el anuncio real desde su tarjeta del muro.
 const liveVideo = media['live-video']
@@ -316,7 +318,7 @@ let downAt = { x: 0, y: 0 }
 addEventListener('pointerdown', (e) => (downAt = { x: e.clientX, y: e.clientY }))
 addEventListener('click', (e) => {
   const t = e.target as HTMLElement
-  if (t.closest('[contenteditable], a, button, video[controls]')) return
+  if (t.closest('[contenteditable], a, button, video[controls], .phone')) return
   if (Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) > 6) return
   if (String(getSelection() ?? '').length) return
   if (liveVideo?.isOpen) return
@@ -341,7 +343,7 @@ addEventListener('pointermove', (e) => {
   const over = e.target as HTMLElement
   const play = onLiveSlide() && !liveVideo?.isOpen && !!over.closest('#s05')
   cursor.classList.toggle('is-play', play)
-  cursor.classList.toggle('is-big', play || !!over.closest('.motive, .case-box, .brief-card, .flow-box, .media-slot'))
+  cursor.classList.toggle('is-big', play || !!over.closest('.motive, .case-box, .brief-card, .flow-box, .media-slot, .phone'))
   document.body.classList.remove('is-idle')
   clearTimeout(idleTimer)
   idleTimer = window.setTimeout(() => document.body.classList.add('is-idle'), 2500)

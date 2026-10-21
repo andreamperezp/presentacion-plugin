@@ -30,7 +30,7 @@ con las animaciones en su estado final y las escenas 3D como fotograma estático
 Todo está en `src/content.ts`:
 
 - `media`: rutas de imagen o vídeo (`.mp4` / `.webm`, autoplay muted loop). Copia los archivos a `public/assets/` y escribe
-  p. ej. `'ad-a': './assets/anuncio-a.mp4'`. `ad-a` y `ad-b` se usan en la 01 y en la 06 (mismo archivo).
+  p. ej. `'ad-a': './assets/anuncio-a.mp4'`. `ad-a` y `ad-b` se ven dentro de un teléfono en la 01 y en la 06 (mismo archivo); no arrancan solos, se reproducen con sonido al pulsar play.
 - `live-video`: el anuncio que se ve dentro del muro de la 05 y se abre al hacer clic (`public/assets/media/screamfield-live.mp4`).
 - `results`: periodo, inversión y métrica de la 06. Se muestran como "—" hasta tener datos verificados.
 - `flags.moon`: oculta la luna 3D de la 04.

@@ -1,5 +1,5 @@
 import { copy, logos, results, flags } from '../content'
-import { mediaSlot } from '../ui/MediaSlot'
+import { mediaSlot, phoneSlot } from '../ui/MediaSlot'
 
 export type SceneKind = 'moon' | 'cards-dark' | 'galaxy' | 'slabs'
 
@@ -42,11 +42,11 @@ export const slideDefs: SlideDef[] = [
       <div class="s01-ads">
         <figure class="ad" data-a>
           <figcaption class="mono">${c.s01.adA}</figcaption>
-          ${mediaSlot('ad-a', 'ad-slot', '9:16')}
+          ${phoneSlot('ad-a')}
         </figure>
         <figure class="ad ad--b" data-a>
           <figcaption class="mono">${c.s01.adB}</figcaption>
-          ${mediaSlot('ad-b', 'ad-slot', '9:16')}
+          ${phoneSlot('ad-b')}
         </figure>
       </div>
       <p class="mono s01-vote" data-a><i class="dot"></i>${c.s01.vote}</p>
@@ -126,7 +126,7 @@ export const slideDefs: SlideDef[] = [
           .map(
             (k) => `
           <article class="result-panel" data-a>
-            ${mediaSlot(k === 'a' ? 'ad-a' : 'ad-b', 'ad-slot', '9:16')}
+            ${phoneSlot(k === 'a' ? 'ad-a' : 'ad-b')}
             <div class="result-body">
               <h3 class="result-title">${k === 'a' ? c.s06.adA : c.s06.adB}</h3>
               <p class="mono result-label">${c.s06.results}</p>
