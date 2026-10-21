@@ -1,7 +1,7 @@
 import { copy, logos, results, flags } from '../content'
 import { mediaSlot } from '../ui/MediaSlot'
 
-export type SceneKind = 'moon' | 'cards-dark' | 'cards-light' | 'galaxy' | 'slabs'
+export type SceneKind = 'moon' | 'cards-dark' | 'galaxy' | 'slabs'
 
 export interface SlideDef {
   id: string
@@ -182,33 +182,6 @@ export const slideDefs: SlideDef[] = [
           .join('')}
       </ol>`,
   },
-  // 09 · Caso 02 · WOW Stage
-  {
-    id: 's09',
-    theme: 'light',
-    bg: '#F4F3EF',
-    bleed: `<div class="s09-media">${mediaSlot('wow-stage', 'bleed-media', 'VÍDEO / FOTO OFICIAL')}</div>`,
-    stage: `
-      <div class="s09-text">
-        <p class="mono s09-label" data-a><i class="diamond"></i>${c.s09.label[0]}<span class="sep">/</span>${c.s09.label[1]}</p>
-        ${title(c.s09.title)}
-        ${caption(c.s09.caption)}
-      </div>`,
-  },
-  // 10 · WOW Stage Live
-  {
-    id: 's10',
-    theme: 'light',
-    bg: '#F4F3EF',
-    scene: 'cards-light',
-    bleed: `<div class="shade shade--left shade--paper"></div>`,
-    stage: `
-      <p class="live-min mono" data-a><i class="live-dot"></i>${c.s10.live}</p>
-      <div class="s10-text">
-        ${title(c.s10.title)}
-        ${caption(c.s10.caption)}
-      </div>`,
-  },
   // 11 · Agency life
   {
     id: 's11',
@@ -294,6 +267,9 @@ export const slideDefs: SlideDef[] = [
         <img src="${logos.plugin}" alt="Plugin Creativo" />
         <i class="vsep"></i>
         <span class="mono">${c.s14.footer}</span>
-      </footer>`,
+      </footer>
+      <button class="to-top" type="button" aria-label="Volver al inicio" data-a>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>`,
   },
 ]

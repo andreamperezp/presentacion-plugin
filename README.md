@@ -1,6 +1,6 @@
 # Plugin Creativo × Screamfield · Universidad Nebrija
 
-Presentación web con scroll de 14 secciones (Vite + TypeScript + three.js + GSAP + Lenis).
+Presentación web con scroll de 12 secciones (Vite + TypeScript + three.js + GSAP + Lenis).
 Cada sección ocupa una pantalla; al hacer scroll, la siguiente sube como una cortina y la anterior se aleja.
 
 ## Uso
@@ -13,8 +13,9 @@ npm run build     # carpeta estática en dist/ (funciona offline: abrir con `npm
 
 | Tecla | Acción |
 | --- | --- |
-| → ↓ Espacio PageDown / clic | Sección siguiente |
-| ← ↑ PageUp | Sección anterior |
+| → ↓ Espacio PageDown / clic / flecha ↓ en pantalla | Sección siguiente |
+| ← ↑ PageUp Retroceso / flecha ↑ en pantalla | Sección anterior |
+| Botón ↑ en la última sección | Vuelve al inicio |
 | Inicio / Fin | Primera / última |
 | F | Pantalla completa |
 | N | Ventana de notas del ponente (actual, siguiente, notas, reloj) |

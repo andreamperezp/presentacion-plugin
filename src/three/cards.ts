@@ -18,13 +18,6 @@ export const cardsDark: CardsOptions = {
   detail: 0.55,
 }
 
-export const cardsLight: CardsOptions = {
-  bg: '#F4F3EF',
-  palette: ['#5D5FD3', '#1E0A3C', '#3DEBB8', '#8B8DE6', '#2D1559', '#B9BAF0', '#4A3C8C'],
-  flash: '#3DEBB8',
-  detail: 0.85,
-}
-
 const COLS = 15
 const ROWS = 8
 const RADIUS = 9

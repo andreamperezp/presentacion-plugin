@@ -9,7 +9,6 @@ export const media = {
   'live-video': './assets/media/screamfield-live.mp4', // Anuncio real dentro del muro de la 05 (9:16); al hacer clic se abre a pantalla completa
   team: '', // Foto real de Mike y Eduardo / equipo (03)
   'screamfield-hero': '', // Vídeo hero o fotograma de Screamfield (04)
-  'wow-stage': '', // Vídeo / foto oficial de WOW Stage (09)
   'agency-life': '', // Foto documental de Plugin trabajando (11)
 } satisfies Record<string, string>
 
@@ -80,17 +79,6 @@ export const copy = {
     steps: ['ANUNCIOS', 'SELECCIÓN INICIAL', 'RANKING Y ENTREGA', 'RESPUESTA'],
     tag: 'ANDROMEDA',
     highlight: 1, // índice de "SELECCIÓN INICIAL": la única fase resaltada
-  },
-  s09: {
-    label: ['WOW STAGE', 'SEGUNDO CASO REAL'],
-    title: 'MISMA PLATAFORMA.|*OTRO PÚBLICO.*|*OTRA HISTORIA.*',
-    caption:
-      'Lo que funciona para una experiencia no tiene por qué funcionar para otra. Cambian las motivaciones.',
-  },
-  s10: {
-    live: 'LIVE · WOW STAGE EN ADS MANAGER',
-    title: 'EL FORMATO|NO ES LA|*ESTRATEGIA.*',
-    caption: 'Antes de copiar un anuncio, entiende a quién habla, qué promete y qué quiere conseguir.',
   },
   s11: {
     title: 'SER DUEÑO DE UNA AGENCIA NO ES HACER REELS TODO EL DÍA.',
@@ -163,16 +151,6 @@ export const slides = [
       'Diagrama de cuatro pasos con Andromeda identificada únicamente en la fase de selección inicial. NO representarla como todo el algoritmo de Meta.',
   },
   {
-    name: 'Caso 02 · WOW Stage',
-    notes:
-      'Creatividad real de WOW Stage con contraste visual claro respecto a Screamfield. Evitar cifras u objetivos no verificados.\nMaterial pendiente: vídeo o fotografía oficial autorizada de WOW Stage.',
-  },
-  {
-    name: 'WOW Stage · Live',
-    notes:
-      'Pantalla puente para abrir la segunda cuenta. Jerarquía máxima para la frase y mínima para el marcador LIVE.\nMaterial pendiente: cuenta publicitaria real / captura de respaldo autorizada.',
-  },
-  {
     name: 'Agency life',
     notes:
       'Fotografía documental auténtica de Plugin trabajando: reunión, producción, dirección o revisión creativa. Nada de stock.\nMaterial pendiente: foto real de Mike, Eduardo o el equipo.',
@@ -185,7 +163,7 @@ export const slides = [
   {
     name: 'Creative challenge',
     notes:
-      'Estructura de brief de agencia. Las cuatro variables deben verse desde el fondo del aula. Escribe el caso elegido en la caja CASO.\nTecla T: inicia / pausa el temporizador (5 + 5 + 2 min). Tecla R: reinicia.\nElegir Screamfield o WOW Stage previamente. Sin inventar recursos o límites reales.',
+      'Estructura de brief de agencia. Las cuatro variables deben verse desde el fondo del aula. Escribe el caso elegido en la caja CASO.\nTecla T: inicia / pausa el temporizador (5 + 5 + 2 min). Tecla R: reinicia.\nSin inventar recursos o límites reales.',
   },
   {
     name: 'Cierre',

@@ -9,7 +9,7 @@ import { logos, media, slides } from './content'
 import { slideDefs, type SceneKind } from './slides'
 import { SceneManager, type SceneFactory } from './three/SceneManager'
 import { moon } from './three/moon'
-import { cards, cardsDark, cardsLight, type CardsModule } from './three/cards'
+import { cards, cardsDark, type CardsModule } from './three/cards'
 import { galaxy } from './three/galaxy'
 import { slabs } from './three/slabs'
 import { syncVideos } from './ui/MediaSlot'
@@ -45,6 +45,10 @@ app.innerHTML = `
   <div class="loader"><img src="${logos.plugin}" alt="" /><i class="loader-bar"></i></div>
   <div class="progress"></div>
   <div class="cursor is-hidden"><i class="cursor-play"></i></div>
+  <nav class="nav" aria-label="Navegación">
+    <button class="nav-btn nav-prev" type="button" aria-label="Sección anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+    <button class="nav-btn nav-next" type="button" aria-label="Sección siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+  </nav>
   <div class="scroller" style="height:${N * 100}vh"></div>
   ${slideDefs
     .map(
@@ -74,6 +78,8 @@ const panels = [...document.querySelectorAll<HTMLElement>('.panel')]
 const inners = panels.map((p) => p.querySelector<HTMLElement>('.panel-inner')!)
 const dims = panels.map((p) => p.querySelector<HTMLElement>('.panel-dim')!)
 const progressBar = document.querySelector<HTMLElement>('.progress')!
+const navPrev = document.querySelector<HTMLButtonElement>('.nav-prev')!
+const navNext = document.querySelector<HTMLButtonElement>('.nav-next')!
 const titles = panels.map((p) => (p.querySelector('.title')?.textContent ?? '').replace(/\s+/g, ' ').trim())
 
 /* ───────────── Escenas 3D ───────────── */
@@ -81,7 +87,6 @@ const titles = panels.map((p) => (p.querySelector('.title')?.textContent ?? '').
 const factories: Record<SceneKind, SceneFactory> = {
   moon,
   'cards-dark': cards({ ...cardsDark, video: media['live-video'] || undefined }),
-  'cards-light': cards(cardsLight),
   galaxy,
   slabs,
 }
@@ -132,7 +137,9 @@ const visible = panels.map(() => false)
 
 function go(i: number) {
   i = Math.max(0, Math.min(N - 1, i))
-  lenis.scrollTo(i * vh, { duration: reduced ? 0 : 1.25, easing: (t) => 1 - Math.pow(1 - t, 4), lock: true })
+  // Saltos largos (volver al inicio) duran más para que se vean pasar las secciones.
+  const duration = reduced ? 0 : Math.min(3, 1.25 + Math.max(0, Math.abs(i - active) - 1) * 0.15)
+  lenis.scrollTo(i * vh, { duration, easing: (t) => 1 - Math.pow(1 - t, 4), lock: true })
 }
 
 function layout(s: number) {
@@ -173,6 +180,8 @@ function layout(s: number) {
   if (a !== active) {
     active = a
     history.replaceState(null, '', `#${a + 1}`)
+    navPrev.disabled = a === 0
+    navNext.hidden = a === N - 1
     presenter.update(a)
   }
 }
@@ -257,6 +266,7 @@ function onKey(e: KeyboardEvent) {
     case 'ArrowLeft':
     case 'ArrowUp':
     case 'PageUp':
+    case 'Backspace':
       e.preventDefault()
       go(active - 1)
       break
@@ -296,6 +306,10 @@ function onKey(e: KeyboardEvent) {
   }
 }
 addEventListener('keydown', onKey)
+
+navPrev.addEventListener('click', () => go(active - 1))
+navNext.addEventListener('click', () => go(active + 1))
+document.querySelector('.to-top')?.addEventListener('click', () => go(0))
 
 // Clic / tap avanza, salvo sobre elementos interactivos o al seleccionar texto.
 let downAt = { x: 0, y: 0 }
