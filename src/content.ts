@@ -7,10 +7,10 @@
  * Evita nombres de archivo o claves con "ad" / "ads" / "banner": los bloqueadores de anuncios los ocultan.
  */
 export const media = {
-  'pieza-a': './assets/media/screamfield-live.mp4', // Anuncio A (9:16) — mismo archivo en 01 y 06. Ejemplo hasta tener la pieza real
-  'pieza-b': './assets/media/screamfield-live.mp4', // Anuncio B (9:16) — mismo archivo en 01 y 06. Ejemplo hasta tener la pieza real
+  'pieza-a': './assets/media/p08-estatico.jpg', // Anuncio A · P08 estático (9:16) — mismo archivo en 01 y 06
+  'pieza-b': './assets/media/p10-video-ugc.mp4', // Anuncio B · P10 vídeo UGC (9:16) — mismo archivo en 01 y 06
   'live-video': './assets/media/screamfield-live.mp4', // Anuncio real dentro del muro de la 05 (9:16); al hacer clic se abre a pantalla completa
-  team: '', // Foto real de Mike y Eduardo / equipo (03)
+  team: './assets/media/equipo.jpg', // Foto del equipo (03)
   'screamfield-hero': '', // Vídeo hero o fotograma de Screamfield (04)
   'agency-life': '', // Foto documental de Plugin trabajando (11)
 } satisfies Record<string, string>
@@ -19,9 +19,14 @@ export type MediaKey = keyof typeof media
 
 /** Portada opcional de un vídeo (si no hay, se usa su primer fotograma). */
 export const posters: Partial<Record<MediaKey, string>> = {
-  'pieza-a': './assets/media/screamfield-live-a.jpg',
-  'pieza-b': './assets/media/screamfield-live-b.jpg',
+  'pieza-b': './assets/media/p10-video-ugc.jpg',
 }
+
+/**
+ * Muro de la 05: las piezas reales de Screamfield en un atlas (celdas 9:16 de izquierda a
+ * derecha y de arriba abajo). Se repiten salteadas por las 120 tarjetas del muro.
+ */
+export const wall = { src: './assets/media/muro-screamfield.jpg', count: 29, cols: 8, rows: 4 }
 
 export const logos = {
   plugin: './assets/plugin-logo.png',
@@ -35,8 +40,19 @@ export const flags = {
 
 /** Resultados A/B (06). Solo datos reales, verificados y fechados. */
 export const results = {
-  a: { periodo: '—', inversion: '—', metrica: '—' },
-  b: { periodo: '—', inversion: '—', metrica: '—' },
+  a: 'P08 · Estático',
+  b: 'P10 · Vídeo UGC',
+  /** main: métrica principal (grande, en brasa) · key: fila destacada */
+  rows: [
+    { label: 'Periodo', a: '01–22 octubre 2026', b: '01–22 octubre 2026' },
+    { label: 'Inversión', a: '4.404,95 €', b: '2.928,19 €' },
+    { label: 'Compras atribuidas', a: '138', b: '89', main: true },
+    { label: 'Coste por compra', a: '31,92 €', b: '32,90 €', key: true },
+    { label: 'Valor de compras atribuido', a: '15.523,08 €', b: '10.045,37 €' },
+    { label: 'ROAS', a: '3,52×', b: '3,43×', key: true },
+    { label: 'CTR de enlace', a: '1,24 %', b: '1,95 %', key: true },
+  ],
+  source: 'Fuente: exportación de Meta Ads del 1 al 22 de octubre; no es el mes completo.',
 }
 
 export const copy = {
@@ -74,7 +90,6 @@ export const copy = {
     adA: 'ANUNCIO A',
     adB: 'ANUNCIO B',
     results: 'RESULTADOS REALES',
-    rows: { periodo: 'PERIODO', inversion: 'INVERSIÓN', metrica: 'MÉTRICA PRINCIPAL' },
   },
   s07: {
     title: 'CAMBIAR EL VÍDEO NO SIEMPRE ES CAMBIAR LA IDEA.',
@@ -162,7 +177,7 @@ export const slides = [
     speaker: 'MIKE',
     minutes: 5,
     notes:
-      'Recuperar exactamente las dos piezas de la 01. Comparativa real con periodo, inversión y métrica principal legibles.\nMétricas verificadas y fechadas; no inventar ni insinuar causalidad.',
+      'Anuncio A = P08 estático · Anuncio B = P10 vídeo UGC (play para reproducirlo). Datos: exportación de Meta Ads del 1 al 22 de octubre, no es el mes completo.\nRecuperar exactamente las dos piezas de la 01. Comparativa real con periodo, inversión y métrica principal legibles.\nMétricas verificadas y fechadas; no inventar ni insinuar causalidad.',
   },
   {
     name: 'Diversificación creativa',

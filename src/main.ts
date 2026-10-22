@@ -5,7 +5,7 @@ import './style.css'
 
 import gsap from 'gsap'
 import Lenis from 'lenis'
-import { logos, media, slides } from './content'
+import { logos, media, slides, wall } from './content'
 import { slideDefs, type SceneKind } from './slides'
 import { SceneManager, type SceneFactory } from './three/SceneManager'
 import { moon } from './three/moon'
@@ -88,7 +88,7 @@ const titles = panels.map((p) =>
 
 const factories: Record<SceneKind, SceneFactory> = {
   moon,
-  'cards-dark': cards({ ...cardsDark, video: media['live-video'] || undefined }),
+  'cards-dark': cards({ ...cardsDark, video: media['live-video'] || undefined, atlas: wall }),
   galaxy,
   slabs,
 }

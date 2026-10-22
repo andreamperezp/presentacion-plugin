@@ -9,6 +9,8 @@ interface CardsOptions {
   detail: number
   /** Vídeo real que sustituye a una de las tarjetas del muro. */
   video?: string
+  /** Piezas reales: atlas de celdas 9:16. Sustituye a la textura genérica de anuncio. */
+  atlas?: { src: string; count: number; cols: number; rows: number }
 }
 
 export const cardsDark: CardsOptions = {
@@ -122,12 +124,36 @@ export const cards =
     scene.add(group)
 
     const geo = new THREE.PlaneGeometry(CARD_W, CARD_H)
-    const mat = new THREE.MeshBasicMaterial({ map: adTexture(opts.detail), transparent: true, alphaTest: 0.5, side: THREE.DoubleSide })
+    const atlas = opts.atlas
+    const mat = atlas
+      ? new THREE.MeshBasicMaterial({ alphaMap: roundMask(), alphaTest: 0.5, side: THREE.DoubleSide })
+      : new THREE.MeshBasicMaterial({ map: adTexture(opts.detail), transparent: true, alphaTest: 0.5, side: THREE.DoubleSide })
     const mesh = new THREE.InstancedMesh(geo, mat, COLS * ROWS)
+    if (atlas) {
+      const tex = new THREE.TextureLoader().load(atlas.src)
+      tex.colorSpace = THREE.SRGBColorSpace
+      tex.anisotropy = 8
+      mat.map = tex
+      // Cada instancia muestra una celda del atlas, salteadas para que no se repitan juntas.
+      const cells = new Float32Array(COLS * ROWS * 2)
+      for (let i = 0; i < COLS * ROWS; i++) {
+        const n = (i * 7 + Math.floor(i / COLS) * 3) % atlas.count
+        cells[i * 2] = (n % atlas.cols) / atlas.cols
+        cells[i * 2 + 1] = 1 - (Math.floor(n / atlas.cols) + 1) / atlas.rows
+      }
+      geo.setAttribute('aCell', new THREE.InstancedBufferAttribute(cells, 2))
+      mat.onBeforeCompile = (shader) => {
+        shader.uniforms.uCellSize = { value: new THREE.Vector2(1 / atlas.cols, 1 / atlas.rows) }
+        shader.vertexShader =
+          'attribute vec2 aCell;\nuniform vec2 uCellSize;\n' +
+          shader.vertexShader.replace('#include <uv_vertex>', '#include <uv_vertex>\n\tvMapUv = vMapUv * uCellSize + aCell;')
+      }
+    }
     group.add(mesh)
 
     const palette = opts.palette.map((c) => new THREE.Color(c))
-    const flash = new THREE.Color(opts.flash)
+    // Con piezas reales la tarjeta se "enciende" a pleno brillo, con un punto cálido.
+    const flash = atlas ? new THREE.Color(1.25, 1.08, 0.98) : new THREE.Color(opts.flash)
     const base: THREE.Color[] = []
     const current: THREE.Color[] = []
     const phase: number[] = []
@@ -141,7 +167,10 @@ export const cards =
         const i = r * COLS + col
         // Columnas alternas desplazadas en vertical, como un muro editorial.
         layout.push({ a: (col - (COLS - 1) / 2) * angleStep, y: (r - (ROWS - 1) / 2) * rowStep + (col % 2 ? rowStep * 0.35 : 0) })
-        const b = palette[Math.floor(Math.random() * palette.length)].clone()
+        // Con piezas reales, el color de la instancia solo regula el brillo: el muro en penumbra.
+        const b = atlas
+          ? new THREE.Color().setScalar(0.32 + Math.random() * 0.22)
+          : palette[Math.floor(Math.random() * palette.length)].clone()
         base.push(b)
         current.push(b.clone())
         phase.push(Math.random() * Math.PI * 2)

@@ -32,7 +32,8 @@ Todo está en `src/content.ts`:
 - `media`: rutas de imagen o vídeo (`.mp4` / `.webm`, autoplay muted loop). Copia los archivos a `public/assets/` y escribe
   p. ej. `'pieza-a': './assets/anuncio-a.mp4'`. `pieza-a` y `pieza-b` se ven dentro de un teléfono en la 01 y en la 06 (mismo archivo); no arrancan solos, se reproducen con sonido al pulsar play.
 - `live-video`: el anuncio que se ve dentro del muro de la 05 y se abre al hacer clic (`public/assets/media/screamfield-live.mp4`).
-- `results`: periodo, inversión y métrica de la 06. Se muestran como "—" hasta tener datos verificados.
+- `results`: tabla de resultados de la 06 (filas, métrica principal y fuente).
+- `wall`: atlas con las piezas reales del muro de la 05 (`public/assets/media/muro-screamfield.jpg`, 29 piezas en celdas 9:16).
 - `flags.moon`: oculta la luna 3D de la 04.
 - `copy`: textos exactos (`*texto*` = color de acento, `|` = salto de línea).
 - `slides[].speaker` / `slides[].minutes`: escaleta (un solo ponente por sección).

@@ -121,24 +121,38 @@ export const slideDefs: SlideDef[] = [
         ${title(c.s06.title)}
         ${caption(c.s06.caption)}
       </header>
-      <div class="s06-panels">
-        ${(['a', 'b'] as const)
-          .map(
-            (k) => `
-          <article class="result-panel" data-a>
+      <div class="s06-body">
+        <div class="s06-phones">
+          ${(['a', 'b'] as const)
+            .map(
+              (k) => `
+          <figure class="pick" data-a>
+            <figcaption class="mono">${k === 'a' ? c.s06.adA : c.s06.adB}</figcaption>
             ${phoneSlot(k === 'a' ? 'pieza-a' : 'pieza-b')}
-            <div class="result-body">
-              <h3 class="result-title">${k === 'a' ? c.s06.adA : c.s06.adB}</h3>
-              <p class="mono result-label">${c.s06.results}</p>
-              <dl class="result-rows">
-                <div><dt class="mono">${c.s06.rows.periodo}</dt><dd>${results[k].periodo}</dd></div>
-                <div><dt class="mono">${c.s06.rows.inversion}</dt><dd>${results[k].inversion}</dd></div>
-                <div class="is-main"><dt class="mono">${c.s06.rows.metrica}</dt><dd>${results[k].metrica}</dd></div>
-              </dl>
-            </div>
-          </article>`,
-          )
-          .join('')}
+          </figure>`,
+            )
+            .join('')}
+        </div>
+        <div class="s06-data" data-a>
+          <table class="results">
+            <thead>
+              <tr>
+                <th class="mono results-tag">${c.s06.results}</th>
+                <th><span>${c.s06.adA}</span><small class="mono">${results.a}</small></th>
+                <th><span>${c.s06.adB}</span><small class="mono">${results.b}</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              ${results.rows
+                .map(
+                  (r) =>
+                    `<tr class="${'main' in r ? 'is-main' : 'key' in r ? 'is-key' : ''}"><th class="mono" scope="row">${r.label}</th><td>${r.a}</td><td>${r.b}</td></tr>`,
+                )
+                .join('')}
+            </tbody>
+          </table>
+          <p class="mono results-source">${results.source}</p>
+        </div>
       </div>`,
   },
   // 07 · Diversificación creativa
