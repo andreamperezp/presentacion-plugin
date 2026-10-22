@@ -939,26 +939,6 @@ ol {
   align-items: stretch;
   gap: 24u;
 }
-.case-box {
-  border: 3u dashed rgb(244 243 239 / 0.45);
-  border-radius: 20u;
-  padding: 22u 28u 26u;
-  color: var(--muted-dark);
-}
-.case-field {
-  margin-top: 10u;
-  min-height: 1.1em;
-  font: 900 52u/1.05 var(--sans);
-  font-stretch: 88%;
-  text-transform: uppercase;
-  color: var(--paper);
-  outline: none;
-  caret-color: var(--mint);
-}
-.case-field:empty::before {
-  content: '·';
-  color: rgb(244 243 239 / 0.3);
-}
 .countdown {
   font-size: 128u;
   font-weight: 600;

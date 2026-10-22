@@ -9,7 +9,7 @@
 export const media = {
   'pieza-a': './assets/media/p08-estatico.jpg', // Anuncio A · P08 estático (9:16) — mismo archivo en 01 y 06
   'pieza-b': './assets/media/p10-video-ugc.mp4', // Anuncio B · P10 vídeo UGC (9:16) — mismo archivo en 01 y 06
-  'live-video': './assets/media/screamfield-live.mp4', // Anuncio real dentro del muro de la 05 (9:16); al hacer clic se abre a pantalla completa
+  'live-video': './assets/media/p10-video-ugc.mp4', // Anuncio real dentro del muro de la 05 (9:16); al hacer clic se abre a pantalla completa
   team: './assets/media/equipo.jpg', // Foto del equipo (03)
   'screamfield-hero': '', // Vídeo hero o fotograma de Screamfield (04)
   'agency-life': '', // Foto documental de Plugin trabajando (11)
@@ -117,7 +117,6 @@ export const copy = {
   s13: {
     title: 'TENÉIS CLIENTE. TENÉIS RECURSOS.|*¿QUÉ PRODUCÍS MAÑANA?*',
     caption: 'Una idea nueva. Un público concreto. Una hipótesis que podamos poner a prueba.',
-    caseLabel: 'CASO',
     cards: ['PÚBLICO', 'MOTIVACIÓN', 'HOOK', 'FORMATO'],
     phases: [
       { label: '5 MIN PARA PENSAR', minutes: 5, weight: 5 },
@@ -212,7 +211,7 @@ export const slides = [
     speaker: 'EDUARDO',
     minutes: 8,
     notes:
-      'Estructura de brief de agencia. Las cuatro variables deben verse desde el fondo del aula. Escribe el caso elegido en la caja CASO.\nTecla T: inicia / pausa el temporizador (5 + 5 + 2 min). Tecla R: reinicia.\nSin inventar recursos o límites reales.',
+      'Estructura de brief de agencia. Las cuatro variables deben verse desde el fondo del aula.\nTecla T: inicia / pausa el temporizador (5 + 5 + 2 min). Tecla R: reinicia.\nSin inventar recursos o límites reales.',
   },
   {
     name: 'Cierre',

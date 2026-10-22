@@ -345,7 +345,7 @@ addEventListener('pointermove', (e) => {
   const over = e.target as HTMLElement
   const play = onLiveSlide() && !liveVideo?.isOpen && !!over.closest('#s05')
   cursor.classList.toggle('is-play', play)
-  cursor.classList.toggle('is-big', play || !!over.closest('.motive, .case-box, .brief-card, .flow-box, .media-slot, .phone'))
+  cursor.classList.toggle('is-big', play || !!over.closest('.motive, .brief-card, .flow-box, .media-slot, .phone'))
   document.body.classList.remove('is-idle')
   clearTimeout(idleTimer)
   idleTimer = window.setTimeout(() => document.body.classList.add('is-idle'), 2500)

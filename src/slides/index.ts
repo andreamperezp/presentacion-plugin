@@ -243,10 +243,6 @@ export const slideDefs: SlideDef[] = [
           ${caption(c.s13.caption)}
         </div>
         <div class="s13-side">
-          <div class="case-box" data-a>
-            <span class="mono">${c.s13.caseLabel}</span>
-            <div class="case-field" contenteditable="true" spellcheck="false" aria-label="${c.s13.caseLabel}"></div>
-          </div>
           <div class="countdown mono" aria-live="polite"></div>
         </div>
       </header>
