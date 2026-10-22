@@ -20,7 +20,15 @@ import { VideoLightbox } from './ui/VideoLightbox'
 const N = slideDefs.length
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
 const pad = (n: number) => String(n).padStart(2, '0')
-const unit = () => Math.min(innerWidth / 1920, innerHeight / 1080)
+
+// Móvil y tablet: en vez de encoger el lienzo 1920 × 1080, las secciones pasan a ser una web
+// que se desplaza con normalidad, maquetada en columna y con tamaños legibles (style.css, html.web).
+const flowQuery = matchMedia('(max-width: 1024px), (orientation: portrait) and (max-width: 1366px)')
+const flow = flowQuery.matches
+document.documentElement.classList.toggle('web', flow)
+flowQuery.addEventListener('change', () => location.reload())
+
+const unit = () => (flow ? 0.5 : Math.min(innerWidth / 1920, innerHeight / 1080))
 
 // cubic-bezier(.16,.84,.24,1) — curva de entrada del sistema.
 function bezier(x1: number, y1: number, x2: number, y2: number) {
@@ -141,7 +149,46 @@ function go(i: number) {
   i = Math.max(0, Math.min(N - 1, i))
   // Saltos largos (volver al inicio) duran más para que se vean pasar las secciones.
   const duration = reduced ? 0 : Math.min(3, 1.25 + Math.max(0, Math.abs(i - active) - 1) * 0.15)
-  lenis.scrollTo(i * vh, { duration, easing: (t) => 1 - Math.pow(1 - t, 4), lock: true })
+  lenis.scrollTo(flow ? panels[i] : i * vh, { duration, easing: (t) => 1 - Math.pow(1 - t, 4), lock: true })
+}
+
+function setActive(a: number) {
+  if (a === active) return
+  active = a
+  history.replaceState(null, '', `#${a + 1}`)
+  navPrev.disabled = a === 0
+  navNext.hidden = a === N - 1
+  presenter.update(a)
+}
+
+function setVisible(i: number, show: boolean) {
+  if (show === visible[i]) return
+  visible[i] = show
+  if (!flow) panels[i].style.visibility = show ? 'visible' : 'hidden'
+  syncVideos(panels[i], show)
+  if (!show) pausePhones(panels[i])
+}
+
+/** Posición de cada sección para las escenas 3D (null = fuera de pantalla). */
+const sceneProgress: (number | null)[] = panels.map(() => null)
+
+// Modo web (móvil / tablet): scroll normal; las entradas se disparan al aparecer cada sección.
+function flowLayout() {
+  let a = 0
+  for (let i = 0; i < N; i++) {
+    const r = panels[i].getBoundingClientRect()
+    const show = r.bottom > 0 && r.top < vh
+    setVisible(i, show)
+    sceneProgress[i] = show ? Math.max(-1, Math.min(1, -r.top / vh)) : null
+    if (r.top <= vh * 0.45) a = i
+    if (ready) {
+      if (!played[i] && r.top < vh * 0.82) playEntry(i)
+      else if (played[i] && r.top > vh) hideEntry(i)
+    }
+  }
+  const max = document.documentElement.scrollHeight - vh
+  progressBar.style.transform = `scaleX(${max > 0 ? Math.min(1, lenis.scroll / max) : 1})`
+  setActive(a)
 }
 
 function layout(s: number) {
@@ -149,12 +196,8 @@ function layout(s: number) {
   for (let i = 0; i < N; i++) {
     const p = s - i
     const show = p > -1 && (p < 1 || i === N - 1)
-    if (show !== visible[i]) {
-      visible[i] = show
-      panels[i].style.visibility = show ? 'visible' : 'hidden'
-      syncVideos(panels[i], show)
-      if (!show) pausePhones(panels[i])
-    }
+    setVisible(i, show)
+    sceneProgress[i] = p > -1 && p < 1 ? p : null
     if (!show) continue
     if (p < 0) {
       // Entrando desde abajo: el contenido va algo más lento que la sección.
@@ -179,19 +222,13 @@ function layout(s: number) {
   }
   progressBar.style.transform = `scaleX(${N > 1 ? s / (N - 1) : 1})`
 
-  const a = Math.max(0, Math.min(N - 1, Math.round(s)))
-  if (a !== active) {
-    active = a
-    history.replaceState(null, '', `#${a + 1}`)
-    navPrev.disabled = a === 0
-    navNext.hidden = a === N - 1
-    presenter.update(a)
-  }
+  setActive(Math.max(0, Math.min(N - 1, Math.round(s))))
 }
 
 // Al soltar el scroll entre dos secciones, se asienta en la más cercana en la dirección del gesto.
 let snapTimer = 0
 lenis.on('scroll', () => {
+  if (flow) return
   clearTimeout(snapTimer)
   snapTimer = window.setTimeout(() => {
     const s = lenis.scroll / vh
@@ -205,16 +242,16 @@ lenis.on('scroll', () => {
 gsap.ticker.lagSmoothing(0)
 gsap.ticker.add((time, deltaMs) => {
   lenis.raf(time * 1000)
-  const s = lenis.scroll / vh
-  layout(s)
-  scenes.tick(Math.min(deltaMs / 1000, 0.05), s)
+  if (flow) flowLayout()
+  else layout(lenis.scroll / vh)
+  scenes.tick(Math.min(deltaMs / 1000, 0.05), (i) => sceneProgress[i])
 })
 
 addEventListener('resize', () => {
   const s = lenis.scroll / vh
   vh = innerHeight
   lenis.resize()
-  lenis.scrollTo(s * vh, { immediate: true, force: true })
+  if (!flow) lenis.scrollTo(s * vh, { immediate: true, force: true })
 })
 
 /* ───────────── Navegación ───────────── */
@@ -325,7 +362,8 @@ addEventListener('click', (e) => {
   if (String(getSelection() ?? '').length) return
   if (liveVideo?.isOpen) return
   if (onLiveSlide() && t.closest('#s05')) return openLiveVideo()
-  go(active + 1)
+  // En la versión web (móvil / tablet) un toque no cambia de sección: se navega con scroll.
+  if (!flow) go(active + 1)
 })
 
 addEventListener('hashchange', () => {
@@ -359,7 +397,10 @@ gsap.ticker.add(() => {
 /* ───────────── Arranque ───────────── */
 
 const initial = Math.max(0, Math.min(N - 1, (parseInt(location.hash.slice(1), 10) || 1) - 1))
-lenis.scrollTo(initial * vh, { immediate: true, force: true })
+const jumpToInitial = () => lenis.scrollTo(flow ? panels[initial] : initial * vh, { immediate: true, force: true })
+jumpToInitial()
+// En la versión web la altura de cada sección depende de las fuentes: se recoloca al cargarlas.
+if (flow && initial > 0) document.fonts.ready.then(jumpToInitial)
 
 addEventListener('beforeprint', () => panels.forEach((_, i) => playEntry(i)))
 

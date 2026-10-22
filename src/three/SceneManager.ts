@@ -78,19 +78,18 @@ export class SceneManager {
     e.mod.resize?.(w, h)
   }
 
-  /** `scroll` en unidades de sección (0 = primera sección arriba). */
-  tick(dt: number, scroll: number) {
+  /** `progressOf(i)`: posición de la sección i (-1 entrando, 0 activa, 1 tapada) o null si no se ve. */
+  tick(dt: number, progressOf: (index: number) => number | null) {
     if (!this.reduced) this.time += dt
     const k = this.reduced ? 0 : 1 - Math.pow(0.001, dt)
     this.mouse.sx += (this.mouse.x - this.mouse.sx) * k
     this.mouse.sy += (this.mouse.y - this.mouse.sy) * k
     for (const e of this.entries) {
-      const progress = scroll - e.index
-      // Visible desde que empieza a entrar hasta que la siguiente sección la tapa del todo.
-      const active = progress > -1 && progress < 1
+      const progress = progressOf(e.index)
+      const active = progress !== null
       if (active !== e.active) e.mod.setActive?.(active)
       e.active = active
-      if (!e.active) continue
+      if (progress === null) continue
       this.renderEntry(e, dt, progress)
     }
   }

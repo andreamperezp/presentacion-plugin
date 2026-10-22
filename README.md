@@ -22,7 +22,9 @@ npm run build     # carpeta estática en dist/ (funciona offline: abrir con `npm
 | Clic / V / Enter (en la 05) | Abre el anuncio real del muro a pantalla completa (Esc o clic para cerrar) |
 | T / R (en la sección del reto) | Iniciar-pausar / reiniciar el temporizador 5 + 5 + 2 min |
 
-La URL guarda la sección (`#5`). Imprimir (Ctrl/Cmd + P → Guardar como PDF) genera una página 1920 × 1080 por sección,
+La URL guarda la sección (`#5`).
+
+**Móvil y tablet:** en pantallas de hasta 1024 px de ancho (y tablets en vertical) la web no encoge el lienzo de 1920 × 1080: cada sección se maqueta en columna, con tamaños de lectura estándar, y se navega con scroll normal (las flechas de la esquina también funcionan). Los estilos están al final de `src/style.css`, bajo `html.web`. Imprimir (Ctrl/Cmd + P → Guardar como PDF) genera una página 1920 × 1080 por sección,
 con las animaciones en su estado final y las escenas 3D como fotograma estático.
 
 ## Dónde cambiar cosas

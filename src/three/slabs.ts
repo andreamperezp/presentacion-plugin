@@ -49,8 +49,14 @@ export const slabs: SceneFactory = (renderer) => {
     resize() {
       // A la derecha, dejando el lado izquierdo para el texto.
       const v = viewSize(camera, camera.position.z)
-      holder.position.x = v.w * 0.27
-      holder.position.y = 0.3
+      if (v.w < v.h) {
+        // En vertical: arriba y centradas, por encima del texto.
+        holder.scale.setScalar(0.5 * Math.min(1, v.w / 4.2))
+        holder.position.set(0.3, v.h * 0.33, 0)
+      } else {
+        holder.scale.setScalar(0.72)
+        holder.position.set(v.w * 0.27, 0.3, 0)
+      }
     },
     update({ t, mx, my, progress }) {
       plates.forEach((m, i) => {

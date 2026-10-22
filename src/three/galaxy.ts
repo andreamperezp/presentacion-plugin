@@ -113,7 +113,7 @@ export const galaxy: SceneFactory = (renderer) => {
     scene,
     camera,
     resize(w, h) {
-      holder.position.set(3 * Math.min(1.3, w / h / (16 / 9)), 0.6, 0)
+      holder.position.set(3 * Math.min(1.3, w / h / (16 / 9)), w < h ? 2.2 : 0.6, 0)
       disc.uniforms.uPR.value = stars.uniforms.uPR.value = renderer.getPixelRatio()
     },
     update({ t, mx, my, progress }) {

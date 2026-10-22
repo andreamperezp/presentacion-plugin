@@ -162,13 +162,16 @@ export const moon: SceneFactory = (renderer) => {
   embers.frustumCulled = false
   scene.add(embers)
 
+  let baseScale = 1
+
   return {
     scene,
     camera,
     resize() {
-      // Luna arriba a la derecha, sea cual sea la proporción de pantalla.
+      // Luna arriba a la derecha, sea cual sea la proporción de pantalla; más pequeña en vertical.
       const v = viewSize(camera, camera.position.z)
-      group.position.set(v.w / 2 - 3.3, v.h / 2 - 2.7, 0)
+      baseScale = v.w < v.h ? Math.max(0.42, v.w / 8) : 1
+      group.position.set(v.w / 2 - 3.3 * baseScale, v.h / 2 - 2.7 * baseScale, 0)
       emberUniforms.uPR.value = renderer.getPixelRatio()
     },
     update({ t, mx, my, progress }) {
@@ -179,7 +182,7 @@ export const moon: SceneFactory = (renderer) => {
       camera.position.x = mx * 0.35
       camera.position.y = -my * 0.25 - progress * 1.2
       camera.lookAt(0, -progress * 1.2, 0)
-      group.scale.setScalar(1 + Math.max(0, progress) * 0.15)
+      group.scale.setScalar(baseScale * (1 + Math.max(0, progress) * 0.15))
     },
   }
 }
