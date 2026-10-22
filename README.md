@@ -19,7 +19,6 @@ npm run build     # carpeta estática en dist/ (funciona offline: abrir con `npm
 | Inicio / Fin | Primera / última |
 | F | Pantalla completa |
 | N | Ventana de notas: quién habla, tiempo de la sección según la escaleta (90 min), notas, siguiente ponente y reloj total |
-| Clic / V / Enter (en la 05) | Abre el anuncio real del muro a pantalla completa (Esc o clic para cerrar) |
 | T / R (en la sección del reto) | Iniciar-pausar / reiniciar el temporizador 5 + 5 + 2 min |
 
 La URL guarda la sección (`#5`).
@@ -33,7 +32,7 @@ Todo está en `src/content.ts`:
 
 - `media`: rutas de imagen o vídeo (`.mp4` / `.webm`, autoplay muted loop). Copia los archivos a `public/assets/` y escribe
   p. ej. `'pieza-a': './assets/anuncio-a.mp4'`. `pieza-a` y `pieza-b` se ven dentro de un teléfono en la 01 y en la 06 (mismo archivo); no arrancan solos, se reproducen con sonido al pulsar play.
-- `live-video`: el anuncio que se ve dentro del muro de la 05 y se abre al hacer clic (`public/assets/media/p10-video-ugc.mp4`, el mismo P10 de las secciones 01 y 06).
+- `live-video`: vídeo opcional dentro del muro de la 05 (se abre a pantalla completa al hacer clic). Vacío = muro solo con piezas estáticas.
 - `results`: tabla de resultados de la 06 (filas, métrica principal y fuente).
 - `wall`: atlas con las piezas reales del muro de la 05 (`public/assets/media/muro-screamfield.jpg`, 29 piezas en celdas 9:16).
 - `flags.moon`: oculta la luna 3D de la 04.

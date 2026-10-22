@@ -71,7 +71,7 @@ export class PresenterView {
         <span class="mono">Siguiente</span>
         <div class="nspk" id="nspk"></div>
         <h2 id="nxt"></h2>
-        <p class="mono keys">← → navegar · V vídeo (05) · T temporizador (11) · R reiniciar · F pantalla completa</p>
+        <p class="mono keys">← → navegar · T temporizador (11) · R reiniciar · F pantalla completa</p>
       </section>`
     this.win.addEventListener('keydown', (e) => this.onKey(e))
     d.getElementById('reset')!.addEventListener('click', () => {

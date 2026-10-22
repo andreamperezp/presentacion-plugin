@@ -9,7 +9,7 @@
 export const media = {
   'pieza-a': './assets/media/p08-estatico.jpg', // Anuncio A · P08 estático (9:16) — mismo archivo en 01 y 06
   'pieza-b': './assets/media/p10-video-ugc.mp4', // Anuncio B · P10 vídeo UGC (9:16) — mismo archivo en 01 y 06
-  'live-video': './assets/media/p10-video-ugc.mp4', // Anuncio real dentro del muro de la 05 (9:16); al hacer clic se abre a pantalla completa
+  'live-video': '', // Opcional: vídeo dentro del muro de la 05 que se abre al hacer clic. Vacío = solo piezas estáticas
   team: './assets/media/equipo.jpg', // Foto del equipo (03)
   'screamfield-hero': '', // Vídeo hero o fotograma de Screamfield (04)
   'agency-life': '', // Foto documental de Plugin trabajando (11)
@@ -169,7 +169,7 @@ export const slides = [
     speaker: 'EDUARDO',
     minutes: 25,
     notes:
-      'Eduardo conduce el bloque completo en Ads Manager. Llevar seleccionados los anuncios A/B y 3 piezas adicionales de Screamfield con métricas verificadas.\nClic en cualquier parte de la sección (o tecla V / Enter) abre el anuncio real a pantalla completa con sonido; Esc o clic para cerrar.\nDiapositiva puente hacia el navegador. Dejar aire para pasar al directo. NO simular capturas de Ads Manager (solo una captura real y fechada como plan B).\nMaterial pendiente: cuenta publicitaria real / captura de respaldo autorizada.',
+      'Eduardo conduce el bloque completo en Ads Manager. Llevar seleccionados los anuncios A/B y 3 piezas adicionales de Screamfield con métricas verificadas.\nDiapositiva puente hacia el navegador. Dejar aire para pasar al directo. NO simular capturas de Ads Manager (solo una captura real y fechada como plan B).\nMaterial pendiente: cuenta publicitaria real / captura de respaldo autorizada.',
   },
   {
     name: 'Revelación A/B',
